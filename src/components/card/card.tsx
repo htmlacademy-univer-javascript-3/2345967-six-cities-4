@@ -1,15 +1,24 @@
-function Card(): JSX.Element {
+import { Offer } from '../../types/offer';
+import { AppRoute } from '../../const';
+import { Link } from 'react-router-dom';
+import { Dispatch, SetStateAction } from 'react';
+
+type CardProps = {
+  offer: Offer;
+  onMouseEnter: Dispatch<SetStateAction<number | undefined>>;
+}
+function Card({offer, onMouseEnter}: CardProps): JSX.Element {
   return (
-    <article className="cities__card place-card">
+    <article className="cities__card place-card" onMouseEnter={() => onMouseEnter(offer.id)}>
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img className="place-card__image" src="img/room.jpg" width="260" height="200" alt="Place image" />
-        </a>
+        <Link to={`${AppRoute.Offer}/${offer.id}`}>
+          <img className="place-card__image" src={offer.photos[0].src} width="260" height="200" alt="Place image" />
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;80</b>
+            <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
@@ -24,12 +33,14 @@ function Card(): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: '80%' }}></span>
+            <span style={{ width: `${offer.rating * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">Wood and stone place</a>
+          <Link to={`${AppRoute.Offer}/${offer.id}`}>
+            {offer.name}
+          </Link>
         </h2>
         <p className="place-card__type">Room</p>
       </div>
