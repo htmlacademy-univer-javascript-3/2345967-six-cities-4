@@ -7,6 +7,7 @@ type OfferListProps = {
 };
 
 function OfferList({offers}: OfferListProps): JSX.Element {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeOfferId, setActiveOfferId] = useState<number | undefined>(undefined);
   return (
     <div className="cities__places-list places__list tabs__content">

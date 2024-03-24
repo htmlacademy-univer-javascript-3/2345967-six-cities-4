@@ -13,6 +13,7 @@ type AppProps = {
   offers: Offer[];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function App({ authStatus, offers }: AppProps): JSX.Element {
   return (
     <BrowserRouter>
