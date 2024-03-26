@@ -6,20 +6,21 @@ import OfferPage from './pages/offer-page';
 import FavoritesPage from './pages/favorites-page';
 import PrivateRoute from './components/private-route/private-route';
 import NotFoundPage from './pages/not-found-page';
+import { Offer } from './types/offer';
 
 type AppProps = {
-  placesCount: number;
   authStatus: AuthStatus;
+  offers: Offer[];
 };
 
-function App(props: AppProps): JSX.Element {
-  const { placesCount, authStatus } = props;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function App({ authStatus, offers }: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<PageMain placesCount={placesCount} />}
+          element={<PageMain offers = {offers} />}
         />
         <Route
           path={AppRoute.Login}
@@ -29,15 +30,17 @@ function App(props: AppProps): JSX.Element {
           path={AppRoute.Favorites}
           element={
             <PrivateRoute
-              authStatus={authStatus}
+              authStatus={AuthStatus.Auth}
             >
-              <FavoritesPage/>
+              <FavoritesPage
+                offers = {offers}
+              />
             </PrivateRoute>
           }
         />
         <Route
           path={`${AppRoute.Offer}/:id`}
-          element={<OfferPage />}
+          element={<OfferPage offers={offers} />}
         />
         <Route
           path="*"
