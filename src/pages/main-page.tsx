@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 import OfferList from '../components/offers-list';
 import { Offer } from '../types/offer';
 import { AppRoute } from '../const';
+import Map from '../components/map';
+import { AMSTERDAM_POINTS_MOCK } from '../mocks/points';
+import { AMSTERDAM_MOCK } from '../mocks/offers';
 
 type MainPageProps = {
   offers: Offer[];
@@ -102,7 +105,9 @@ function MainPage({offers}: MainPageProps): JSX.Element {
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map points={AMSTERDAM_POINTS_MOCK} city={AMSTERDAM_MOCK} selectedPoint={undefined}></Map>
+              </section>
             </div>
           </div>
         </div>

@@ -1,9 +1,11 @@
 import { Review } from './rewiew';
 import { Image } from './image';
+import { Point } from './point';
+import { City } from './city';
 
 export type Offer = {
   id: number;
-  city: string;
+  city: City;
   price: number;
   name: string;
   rating: number;
@@ -12,4 +14,5 @@ export type Offer = {
   isPremium: boolean;
   photos: Image[];
   description: string;
+  point: Point;
 }
