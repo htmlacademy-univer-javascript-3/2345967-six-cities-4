@@ -2,6 +2,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Offer } from '../types/offer';
 import { AppRoute } from '../const';
 import ReviewForm from '../components/review-form';
+import ReviewList from '../components/review-list';
+import Map from '../components/map';
+import OfferList from '../components/offers-list';
+import { OFFERS_MOCK } from '../mocks/offers';
 
 type OfferPageProps = {
   offers: Offer[];
@@ -156,43 +160,20 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{selectedOffer.reviews.length}</span></h2>
-                <ul className="reviews__list">
-                  {selectedOffer.reviews.map((review) => (
-                    <li key={review.id} className="reviews__item">
-                      <div className="reviews__user user">
-                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img className="reviews__avatar user__avatar" src={review.user.avatar.src} width="54" height="54" alt={review.user.avatar.alt} />
-                        </div>
-                        <span className="reviews__user-name">
-                          {review.user.name}
-                        </span>
-                      </div>
-                      <div className="reviews__info">
-                        <div className="reviews__rating rating">
-                          <div className="reviews__stars rating__stars">
-                            <span style={{width: `${review.rating * 20}%`}}></span>
-                            <span className="visually-hidden">Rating</span>
-                          </div>
-                        </div>
-                        <p className="reviews__text">
-                          {review.text}
-                        </p>
-                        <time className="reviews__time" dateTime={review.date.toISOString()}>{review.date.getMonth()} {review.date.getFullYear()}</time>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <ReviewList reviews={selectedOffer.reviews} />
                 <ReviewForm />
               </section>
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <section className="offer__map map">
+            <Map city={selectedOffer.city} points={OFFERS_MOCK.map((offer) => offer.point)} selectedPoint={selectedOffer.point}></Map>
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-
+              <OfferList offers={OFFERS_MOCK.filter((offer) => offer.id !== selectedOffer.id)} />
             </div>
           </section>
         </div>
