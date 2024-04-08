@@ -106,7 +106,7 @@ function MainPage({offers}: MainPageProps): JSX.Element {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map points={AMSTERDAM_POINTS_MOCK} city={AMSTERDAM_MOCK} selectedPoint={undefined}></Map>
+                <Map points={AMSTERDAM_POINTS_MOCK} city={AMSTERDAM_MOCK} selectedPoint={undefined} />
               </section>
             </div>
           </div>

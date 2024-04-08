@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Offer } from '../types/offer';
 import { AppRoute } from '../const';
 import ReviewForm from '../components/review-form';
@@ -6,6 +6,7 @@ import ReviewList from '../components/review-list';
 import Map from '../components/map';
 import OfferList from '../components/offers-list';
 import { OFFERS_MOCK } from '../mocks/offers';
+import { useEffect } from 'react';
 
 type OfferPageProps = {
   offers: Offer[];
@@ -14,6 +15,11 @@ type OfferPageProps = {
 function OfferPage({offers}: OfferPageProps): JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() =>{
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const selectedOffer = offers.find((offer) => offer.id === Number(id));
 
@@ -158,15 +164,18 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
                   </p>
                 </div>
               </div>
-              <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{selectedOffer.reviews.length}</span></h2>
-                <ReviewList reviews={selectedOffer.reviews} />
-                <ReviewForm />
-              </section>
+              {selectedOffer.reviews &&
+              (
+                <section className="offer__reviews reviews">
+                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{selectedOffer.reviews.length}</span></h2>
+                  <ReviewList reviews={selectedOffer.reviews} />
+                </section>
+              )}
+              <ReviewForm />
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={selectedOffer.city} points={OFFERS_MOCK.map((offer) => offer.point)} selectedPoint={selectedOffer.point}></Map>
+            <Map city={selectedOffer.city} points={OFFERS_MOCK.map((offer) => offer.point)} selectedPoint={selectedOffer.point} />
           </section>
         </section>
         <div className="container">
