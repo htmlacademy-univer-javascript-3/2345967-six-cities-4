@@ -9,7 +9,7 @@ export type Offer = {
   price: number;
   name: string;
   rating: number;
-  reviews: Review[];
+  reviews?: Review[];
   isFavorite: boolean;
   isPremium: boolean;
   photos: Image[];
