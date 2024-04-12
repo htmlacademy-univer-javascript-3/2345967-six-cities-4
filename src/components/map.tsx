@@ -19,6 +19,7 @@ function Map({city, points, selectedPoint}: MapProps): JSX.Element {
   useEffect(() => {
     if(map) {
       const markerLayer = layerGroup().addTo(map);
+      map.panTo([city.point.lat, city.point.lng]);
       points.forEach((point) => {
         const marker = new Marker({
           lat: point.lat,
