@@ -1,5 +1,5 @@
-import { useAppDispatch } from '../hooks';
-import { changeCity } from '../store/action';
+import { useAppDispatch } from '../store/hooks';
+import { setCurrentCity } from '../store/action';
 import { City } from '../types/city';
 
 type CitiesListProps = {
@@ -22,7 +22,7 @@ const CityTab = ({ city, changeCityName }: CityProps): JSX.Element => (
 function CitiesList({ cities }: CitiesListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const handleCityChange = (city: City) => {
-    dispatch(changeCity(city));
+    dispatch(setCurrentCity(city));
   };
   return (
     <ul className="locations__list tabs__list">

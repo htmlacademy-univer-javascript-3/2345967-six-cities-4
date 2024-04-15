@@ -7,7 +7,7 @@ import FavoritesPage from './pages/favorites-page';
 import PrivateRoute from './components/private-route/private-route';
 import NotFoundPage from './pages/not-found-page';
 import { Offer } from './types/offer';
-import { useAppSelector, useAppDispatch } from './hooks';
+import { useAppSelector, useAppDispatch } from './store/hooks';
 import { setOffersList } from './store/action';
 
 type AppProps = {
@@ -18,13 +18,13 @@ type AppProps = {
 function App({ authStatus }: AppProps): JSX.Element {
   const offers: Offer[] = useAppSelector((state) => state.offersList);
   const dispatch = useAppDispatch();
-  dispatch(setOffersList());
+  dispatch(setOffersList(offers));
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<PageMain />}
+          element={<PageMain offers={offers} />}
         />
         <Route
           path={AppRoute.Login}

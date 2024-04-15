@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setOffersList, changeCity } from './action';
+import { setOffersList, setCurrentCity } from './action';
 import { OFFERS_MOCK } from '../mocks/offers';
 import { CITIES_MOCK } from '../mocks/cities';
 import { Offer } from '../types/offer';
@@ -10,14 +10,14 @@ type StateType = {
   offersList: Offer[];
 };
 
-const initialState: StateType = {
+const currentCity: StateType = {
   city: CITIES_MOCK[5],
   offersList: [],
 };
 
-const reducer = createReducer(initialState, (builder) => {
+const reducer = createReducer(currentCity, (builder) => {
   builder
-    .addCase(changeCity, (state, action) => {
+    .addCase(setCurrentCity, (state, action) => {
       state.city = action.payload;
     })
     .addCase(setOffersList, (state) => {

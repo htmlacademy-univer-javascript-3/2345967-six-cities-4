@@ -5,11 +5,14 @@ import { AppRoute } from '../const';
 import Map from '../components/map';
 import CitiesList from '../components/cities-list';
 import { CITIES_MOCK } from '../mocks/cities';
-import { useAppSelector } from '../hooks/index';
+import { useAppSelector } from '../store/hooks/index';
 import { useEffect, useState } from 'react';
 
-function MainPage(): JSX.Element {
-  const offers = useAppSelector((state) => state.offersList);
+type MainPageProps = {
+  offers: Offer[];
+};
+
+function MainPage({ offers }: MainPageProps): JSX.Element {
   const currentCity = useAppSelector((state) => state.city);
 
   const [currentCityOffers, setCurrentCityOffers] = useState<Offer[]>(offers);
