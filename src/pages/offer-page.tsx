@@ -175,14 +175,14 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={selectedOffer.city} points={OFFERS_MOCK.map((offer) => offer.point)} selectedPoint={selectedOffer.point} />
+            <Map city={selectedOffer.city} points={OFFERS_MOCK.filter((offer) => offer.city === selectedOffer.city).map((offer) => offer.point)} selectedPoint={selectedOffer.point} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OfferList offers={OFFERS_MOCK.filter((offer) => offer.id !== selectedOffer.id)} />
+              <OfferList offers={OFFERS_MOCK.filter((offer) => offer.id !== selectedOffer.id && offer.city === selectedOffer.city)} />
             </div>
           </section>
         </div>

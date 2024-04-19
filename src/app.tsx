@@ -7,20 +7,24 @@ import FavoritesPage from './pages/favorites-page';
 import PrivateRoute from './components/private-route/private-route';
 import NotFoundPage from './pages/not-found-page';
 import { Offer } from './types/offer';
+import { useAppSelector, useAppDispatch } from './store/hooks';
+import { setOffersList } from './store/action';
 
 type AppProps = {
   authStatus: AuthStatus;
-  offers: Offer[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function App({ authStatus, offers }: AppProps): JSX.Element {
+function App({ authStatus }: AppProps): JSX.Element {
+  const offers: Offer[] = useAppSelector((state) => state.offersList);
+  const dispatch = useAppDispatch();
+  dispatch(setOffersList(offers));
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<PageMain offers = {offers} />}
+          element={<PageMain offers={offers} />}
         />
         <Route
           path={AppRoute.Login}
@@ -33,7 +37,7 @@ function App({ authStatus, offers }: AppProps): JSX.Element {
               authStatus={AuthStatus.Auth}
             >
               <FavoritesPage
-                offers = {offers}
+                offers = {offers.filter((offer) => offer.isFavorite)}
               />
             </PrivateRoute>
           }

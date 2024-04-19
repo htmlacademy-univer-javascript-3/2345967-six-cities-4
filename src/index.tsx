@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';
 import { AuthStatus } from './const';
-import { OFFERS_MOCK } from './mocks/offers';
+import { store } from './store';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,9 +11,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App
-      authStatus={AuthStatus.NoAuth}
-      offers = {OFFERS_MOCK}
-    />
+    <Provider store={store}>
+      <App
+        authStatus={AuthStatus.NoAuth}
+      />
+    </Provider>
   </React.StrictMode>
 );
