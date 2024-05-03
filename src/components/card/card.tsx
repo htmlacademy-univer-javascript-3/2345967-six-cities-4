@@ -1,15 +1,20 @@
 import { Offer } from '../../types/offer';
 import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
-import { Dispatch, SetStateAction } from 'react';
+import { setCurrentPoint } from '../../store/action';
+import { Dispatch } from '../../types/state';
 
 type CardProps = {
   offer: Offer;
-  onMouseEnter: Dispatch<SetStateAction<number | undefined>>;
+  dispatch: Dispatch;
 }
-function Card({offer, onMouseEnter}: CardProps): JSX.Element {
+function Card({ offer, dispatch }: CardProps): JSX.Element {
   return (
-    <article className="cities__card place-card" onMouseEnter={() => onMouseEnter(offer.id)}>
+    <article
+      className="cities__card place-card"
+      onMouseEnter={() => dispatch(setCurrentPoint(offer.point))}
+      onMouseLeave={() => dispatch(setCurrentPoint(undefined))}
+    >
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={`${AppRoute.Offer}/${offer.id}`}>
           <img className="place-card__image" src={offer.photos[0].src} width="260" height="200" alt="Place image" />

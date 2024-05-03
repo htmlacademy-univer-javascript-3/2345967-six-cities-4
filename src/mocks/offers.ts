@@ -51,7 +51,7 @@ export const OFFERS_MOCK: Offer[] = [
     name: 'River Thames Hotel',
     rating: 4.0,
     reviews: [REVIEWS_MOCK[1]],
-    isFavorite: false,
+    isFavorite: true,
     isPremium: false,
     photos: [APARTMENTS_MOCK[1], APARTMENTS_MOCK[2]],
     description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of city. The building is green and from 18th century.',
