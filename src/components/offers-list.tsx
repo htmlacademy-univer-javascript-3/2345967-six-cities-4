@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useAppDispatch } from '../store/hooks';
 import { Offer } from '../types/offer';
 import Card from './card/card';
 
@@ -7,12 +7,11 @@ type OfferListProps = {
 };
 
 function OfferList({offers}: OfferListProps): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeOfferId, setActiveOfferId] = useState<number | undefined>(undefined);
+  const dispatch = useAppDispatch();
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
-        <Card key={offer.id} offer={offer} onMouseEnter={setActiveOfferId}/>
+        <Card key={offer.id} offer={offer} dispatch={dispatch}/>
       ))}
     </div>
   );

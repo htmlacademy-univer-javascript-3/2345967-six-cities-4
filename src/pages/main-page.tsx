@@ -1,16 +1,30 @@
 import { Link } from 'react-router-dom';
 import OfferList from '../components/offers-list';
 import { Offer } from '../types/offer';
-import { AppRoute } from '../const';
+import { AppRoute, SortOption } from '../const';
 import Map from '../components/map';
 import CitiesList from '../components/cities-list';
 import { CITIES_MOCK } from '../mocks/cities';
 import { useAppSelector } from '../store/hooks/index';
 import { useEffect, useState } from 'react';
+import SortingOptions from '../components/sorting-options';
 
 type MainPageProps = {
   offers: Offer[];
 };
+
+function getSortedOffers(offers: Offer[], sorting: SortOption): Offer[] {
+  switch (sorting) {
+    case SortOption.Popular:
+      return offers;
+    case SortOption.HighToLow:
+      return offers.toSorted((a, b) => b.price - a.price);
+    case SortOption.LowToHigh:
+      return offers.toSorted((a, b) => a.price - b.price);
+    case SortOption.TopRated:
+      return offers.toSorted((a, b) => b.rating - a.rating);
+  }
+}
 
 function MainPage({ offers }: MainPageProps): JSX.Element {
   const currentCity = useAppSelector((state) => state.city);
@@ -37,7 +51,7 @@ function MainPage({ offers }: MainPageProps): JSX.Element {
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
+                    <span className="header__favorite-count">{offers.filter((offer) => offer.isFavorite).length}</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -63,28 +77,14 @@ function MainPage({ offers }: MainPageProps): JSX.Element {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{currentCityOffers.length} places to stay in {currentCity.name}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                                    Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
+              <SortingOptions />
               <div className="cities__places-list places__list tabs__content">
-                <OfferList offers={currentCityOffers} />
+                <OfferList offers={getSortedOffers(currentCityOffers, useAppSelector((state) => state.currentSort))} />
               </div>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map points={currentCityOffers.map((offer) => offer.point)} city={currentCity} selectedPoint={undefined} />
+                <Map points={currentCityOffers.map((offer) => offer.point)} city={currentCity} selectedPoint={useAppSelector((state) => state.currentPoint)} />
               </section>
             </div>
           </div>
