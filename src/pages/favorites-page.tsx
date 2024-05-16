@@ -3,11 +3,9 @@ import { Offer } from '../types/offer';
 import { AppRoute } from '../const';
 import OfferList from '../components/offers-list';
 
-type FavoritesPageProps = {
-  offers: Offer[];
-}
 
-function FavoritesPage({offers}: FavoritesPageProps): JSX.Element {
+function FavoritesPage(): JSX.Element {
+  const offers: Offer[] = [];
   return (
     <div className="page">
       <header className="header">

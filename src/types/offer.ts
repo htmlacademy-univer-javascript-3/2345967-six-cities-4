@@ -2,17 +2,28 @@ import { Review } from './rewiew';
 import { Image } from './image';
 import { Point } from './point';
 import { City } from './city';
+import { User } from './user';
 
 export type Offer = {
-  id: number;
-  city: City;
+  id: string;
+  title: string;
+  type: string;
   price: number;
-  name: string;
-  rating: number;
-  reviews?: Review[];
+  city: City;
+  location: Point;
   isFavorite: boolean;
   isPremium: boolean;
-  photos: Image[];
-  description: string;
-  point: Point;
+  rating: number;
+
+  previewImage?: string;
+
+  description?: string;
+  bedrooms?: number;
+  goods?: string[];
+  host?: User;
+  images?: Image[];
+  maxAdults?: number;
+
+  reviews?: Review[];
+  nearby?: Offer[];
 }

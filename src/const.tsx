@@ -22,3 +22,22 @@ export enum MapMarker {
   Default = 'img/pin.svg',
   Current = 'img/pin-active.svg'
 }
+
+export enum ApiRoute {
+  Offers = '/offers',
+  Reviews = '/comments',
+  Favourites = '/favorite'
+}
+
+export enum ApiConst {
+  baseURL = 'https://14.design.htmlacademy.pro/six-cities',
+  RequestTimeout = 5000,
+  TokenKeyName = 'six-cities-token'
+}
+
+export enum LoadingStatus {
+  Idle,
+  Pending,
+  Success,
+  Error
+}

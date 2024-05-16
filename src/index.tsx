@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';
-import { AuthStatus } from './const';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import { fetchOffers } from './store/api-actions';
+
+store.dispatch(fetchOffers());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,9 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App
-        authStatus={AuthStatus.NoAuth}
-      />
+      <App />
     </Provider>
   </React.StrictMode>
 );

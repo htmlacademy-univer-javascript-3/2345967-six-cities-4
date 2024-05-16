@@ -5,14 +5,11 @@ import ReviewForm from '../components/review-form';
 import ReviewList from '../components/review-list';
 import Map from '../components/map';
 import OfferList from '../components/offers-list';
-import { OFFERS_MOCK } from '../mocks/offers';
 import { useEffect } from 'react';
+import { useAppSelector } from '../store/hooks';
 
-type OfferPageProps = {
-  offers: Offer[];
-}
-
-function OfferPage({offers}: OfferPageProps): JSX.Element {
+function OfferPage(): JSX.Element {
+  const offers: Offer[] = useAppSelector((state) => state.offersList);
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -21,7 +18,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  const selectedOffer = offers.find((offer) => offer.id === Number(id));
+  const selectedOffer = offers.find((offer) => offer.id === id);
 
   if (!selectedOffer) {
     navigate('/404');
@@ -41,12 +38,12 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
+                  <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
                     <span className="header__favorite-count">{offers.filter((offer) => offer.isFavorite).length}</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
                   <Link to={AppRoute.Login} className="header__nav-link">
@@ -63,7 +60,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {selectedOffer.photos.map((item) => (
+              {selectedOffer.images?.map((item) => (
                 <div key={item.src} className="offer__image-wrapper">
                   <img className="offer__image" src={item.src} alt={item.alt}/>
                 </div>
@@ -79,7 +76,7 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  {selectedOffer.name}
+                  {selectedOffer.title}
                 </h1>
                 <button className={`offer__bookmark-button button ${selectedOffer.isFavorite ? 'offer__bookmark-button--active' : ''}`} type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -175,14 +172,14 @@ function OfferPage({offers}: OfferPageProps): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={selectedOffer.city} points={OFFERS_MOCK.filter((offer) => offer.city === selectedOffer.city).map((offer) => offer.point)} selectedPoint={selectedOffer.point} />
+            <Map city={selectedOffer.city} points={(selectedOffer.nearby) ? selectedOffer.nearby.map((offer) => offer.location) : []} selectedPoint={selectedOffer.location} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OfferList offers={OFFERS_MOCK.filter((offer) => offer.id !== selectedOffer.id && offer.city === selectedOffer.city)} />
+              <OfferList offers={selectedOffer.nearby ? selectedOffer.nearby : []} />
             </div>
           </section>
         </div>
