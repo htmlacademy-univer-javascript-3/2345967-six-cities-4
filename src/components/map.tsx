@@ -13,20 +13,19 @@ type MapProps = {
 }
 
 function Map({city, points, selectedPoint}: MapProps): JSX.Element {
-
   const mapRef = React.useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
     if(map) {
       const markerLayer = layerGroup().addTo(map);
       map.panTo(selectedPoint === undefined
-        ? [city.point.lat, city.point.lng]
-        : [selectedPoint.lat, selectedPoint.lng]
+        ? [city.location.latitude, city.location.longitude]
+        : [selectedPoint.latitude, selectedPoint.longitude]
       );
       points.forEach((point) => {
         const marker = new Marker({
-          lat: point.lat,
-          lng: point.lng
+          lat: point.latitude,
+          lng: point.longitude
         });
         marker
           .setIcon(
@@ -43,7 +42,7 @@ function Map({city, points, selectedPoint}: MapProps): JSX.Element {
         map.removeLayer(markerLayer);
       };
     }
-  }, [city.point.lat, city.point.lng, map, points, selectedPoint]);
+  }, [city.location.latitude, city.location.longitude, map, points, selectedPoint]);
 
   return <div style={{height: '100%'}} ref={mapRef}></div>;
 }

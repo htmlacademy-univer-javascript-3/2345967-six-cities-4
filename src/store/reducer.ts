@@ -1,16 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setOffersList, setCurrentCity, setCurrentSort, setCurrentPoint } from './action';
-import { OFFERS_MOCK } from '../mocks/offers';
+import { loadOffers, setCurrentCity, setCurrentSort, setCurrentPoint, setLoadingStatus } from './action';
 import { CITIES_MOCK } from '../mocks/cities';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
-import { SortOption } from '../const';
+import { LoadingStatus, SortOption } from '../const';
 import { Point } from '../types/point';
+import {} from './api-actions';
 
 type StateType = {
   city: City;
   offersList: Offer[];
   currentSort: SortOption;
+  loadingStatus: LoadingStatus;
   currentPoint?: Point;
 };
 
@@ -18,6 +19,7 @@ const currentState: StateType = {
   city: CITIES_MOCK[5],
   offersList: [],
   currentSort: SortOption.Popular,
+  loadingStatus: LoadingStatus.Success,
   currentPoint: undefined
 };
 
@@ -26,8 +28,11 @@ const reducer = createReducer(currentState, (builder) => {
     .addCase(setCurrentCity, (state, action) => {
       state.city = action.payload;
     })
-    .addCase(setOffersList, (state) => {
-      state.offersList = OFFERS_MOCK;
+    .addCase(loadOffers, (state, action) => {
+      state.offersList = action.payload;
+    })
+    .addCase(setLoadingStatus, (state, action) => {
+      state.loadingStatus = action.payload;
     })
     .addCase(setCurrentSort, (state, action) => {
       state.currentSort = action.payload;
