@@ -1,11 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { loadOffers, setCurrentCity, setCurrentSort, setCurrentPoint, setLoadingStatus } from './action';
+import { loadOffers, setCurrentCity, setCurrentSort, setCurrentPoint, setLoadingStatus, setAuthStatus, setUser } from './action';
 import { CITIES_MOCK } from '../mocks/cities';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
-import { LoadingStatus, SortOption } from '../const';
+import { AuthStatus, LoadingStatus, SortOption } from '../const';
 import { Point } from '../types/point';
 import {} from './api-actions';
+import { User } from '../types/user';
 
 type StateType = {
   city: City;
@@ -13,6 +14,8 @@ type StateType = {
   currentSort: SortOption;
   loadingStatus: LoadingStatus;
   currentPoint?: Point;
+  authorizationStatus: AuthStatus;
+  user?: User;
 };
 
 const currentState: StateType = {
@@ -20,7 +23,9 @@ const currentState: StateType = {
   offersList: [],
   currentSort: SortOption.Popular,
   loadingStatus: LoadingStatus.Success,
-  currentPoint: undefined
+  currentPoint: undefined,
+  authorizationStatus: AuthStatus.Unknown,
+  user: undefined
 };
 
 const reducer = createReducer(currentState, (builder) => {
@@ -39,6 +44,12 @@ const reducer = createReducer(currentState, (builder) => {
     })
     .addCase(setCurrentPoint, (state, action) => {
       state.currentPoint = action.payload;
+    })
+    .addCase(setAuthStatus, (state, action) => {
+      state.authorizationStatus = action.payload;
+    })
+    .addCase(setUser, (state, action) => {
+      state.user = action.payload;
     });
 });
 

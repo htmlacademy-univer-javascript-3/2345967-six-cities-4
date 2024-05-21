@@ -26,7 +26,9 @@ export enum MapMarker {
 export enum ApiRoute {
   Offers = '/offers',
   Reviews = '/comments',
-  Favourites = '/favorite'
+  Favourites = '/favorite',
+  Login = '/login',
+  Logout = '/logout'
 }
 
 export enum ApiConst {
@@ -36,7 +38,6 @@ export enum ApiConst {
 }
 
 export enum LoadingStatus {
-  Idle,
   Pending,
   Success,
   Error
