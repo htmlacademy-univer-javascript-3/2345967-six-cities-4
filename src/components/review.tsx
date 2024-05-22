@@ -1,4 +1,4 @@
-import { Review } from '../types/rewiew';
+import { Review } from '../types/review';
 
 type ReviewProps = {
   review: Review;
@@ -23,9 +23,9 @@ function ReviewItem({review}: ReviewProps): JSX.Element {
           </div>
         </div>
         <p className="reviews__text">
-          {review.text}
+          {review.comment}
         </p>
-        <time className="reviews__time" dateTime={new Date(review.date).toISOString()}> {new Date(review.date).toDateString()}</time>
+        <time className="reviews__time" dateTime={new Date(review.date).toISOString()}> {new Date(review.date).toDateString().slice(3,)}</time>
       </div>
     </li>
   );

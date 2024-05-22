@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setCurrentCity } from '../store/action';
 import { City } from '../types/city';
 
@@ -9,11 +9,12 @@ type CitiesListProps = {
 type CityProps = {
   city: City;
   changeCityName: (city: City) => void;
+  currentCity: City;
 };
 
-const CityTab = ({ city, changeCityName }: CityProps): JSX.Element => (
+const CityTab = ({ city, changeCityName, currentCity }: CityProps): JSX.Element => (
   <li className="locations__item" onClick={() => changeCityName(city)}>
-    <a className="locations__item-link tabs__item" href="#">
+    <a className="tabs__item locations__item-link" style={city === currentCity ? {textShadow: '1px 0 0, .5px 0 0, -1px 0 0'} : {}} href="#">
       <span>{city.name}</span>
     </a>
   </li>
@@ -24,6 +25,7 @@ function CitiesList({ cities }: CitiesListProps): JSX.Element {
   const handleCityChange = (city: City) => {
     dispatch(setCurrentCity(city));
   };
+  const currentCity = useAppSelector((state) => state.city);
   return (
     <ul className="locations__list tabs__list">
       {cities.map((city) => (
@@ -31,6 +33,7 @@ function CitiesList({ cities }: CitiesListProps): JSX.Element {
           key={city.name}
           city={city}
           changeCityName={handleCityChange}
+          currentCity={currentCity}
         />
       ))}
     </ul>

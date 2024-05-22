@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiRoute, AuthStatus, LoadingStatus } from '../const.tsx';
 import { Offer } from '../types/offer.ts';
 import { AxiosInstance } from 'axios';
-import { Review } from '../types/rewiew.ts';
+import { Review } from '../types/review.ts';
 import { Dispatch } from '../types/state.ts';
-import { loadOffers, setAuthStatus, setLoadingStatus, setUser } from './action.ts';
+import { addReview, loadOffer, loadOffers, setAuthStatus, setLoadingStatus, setUser } from './action.ts';
 import { User } from '../types/user.ts';
 import { deleteToken, setToken } from '../services/token.ts';
 
@@ -37,9 +37,10 @@ export const fetchOffer = createAsyncThunk<Offer, Offer['id'], ThunkApiConfig>(
     const {data: offer} = await api.get<Offer>(`${ApiRoute.Offers}/${offerId}`);
     const {data: reviews} = await api.get<Review[]>(`${ApiRoute.Reviews}/${offerId}`);
     const {data: nearby} = await api.get<Offer[]>(`${ApiRoute.Offers}/${offerId}/nearby`);
-    offer.reviews = reviews;
+    offer.reviews = reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     offer.nearby = nearby;
     dispatch(setLoadingStatus(LoadingStatus.Success));
+    dispatch(loadOffer(offer));
     return offer;
   }
 );
@@ -56,14 +57,19 @@ export const checkAuth = createAsyncThunk<void, undefined, ThunkApiConfig>(
   }
 );
 
-export const login = createAsyncThunk<User, UserLogin, ThunkApiConfig>(
+export const login = createAsyncThunk<void, UserLogin, ThunkApiConfig>(
   'user/login',
   async (userLogin: UserLogin, {dispatch, extra: api}) => {
-    const {data} = await api.post<User>(ApiRoute.Login, userLogin);
-    setToken(data.token);
-    dispatch(setAuthStatus(AuthStatus.Auth));
-    dispatch(setUser(data));
-    return data;
+    dispatch(setLoadingStatus(LoadingStatus.Pending));
+    try {
+      const {data} = await api.post<User>(ApiRoute.Login, userLogin);
+      setToken(data.token);
+      dispatch(setAuthStatus(AuthStatus.Auth));
+      dispatch(setUser(data));
+      dispatch(setLoadingStatus(LoadingStatus.Success));
+    } catch {
+      dispatch(setLoadingStatus(LoadingStatus.Error));
+    }
   },
 );
 
@@ -74,5 +80,25 @@ export const logout = createAsyncThunk<void, undefined, ThunkApiConfig>(
     deleteToken();
     dispatch(setAuthStatus(AuthStatus.NoAuth));
     dispatch(setUser(undefined));
+  }
+);
+
+export const postReview = createAsyncThunk<void, Review, ThunkApiConfig>(
+  'postReview',
+  async (reviewData, { dispatch, extra: api }) => {
+    dispatch(setLoadingStatus(LoadingStatus.Pending));
+    try {
+      const { data: review } = await api.post<Review>(
+        `${ApiRoute.Reviews}/${reviewData.id}`,
+        {
+          comment: reviewData.comment,
+          rating: reviewData.rating,
+        }
+      );
+      dispatch(setLoadingStatus(LoadingStatus.Success));
+      dispatch(addReview(review));
+    } catch (e) {
+      dispatch(setLoadingStatus(LoadingStatus.Error));
+    }
   }
 );
