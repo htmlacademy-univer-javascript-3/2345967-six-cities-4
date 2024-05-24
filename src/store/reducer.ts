@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { loadOffers, setCurrentCity, setCurrentSort, setCurrentPoint, setLoadingStatus, setAuthStatus, setUser, loadOffer, addReview, setError } from './action';
+import { loadOffers, setCurrentCity, setCurrentSort, setCurrentPoint, setLoadingStatus, setAuthStatus, setUser, loadOffer, addReview, setError, setRandomCity } from './action';
 import { CITIES_MOCK } from '../mocks/cities';
 import { Offer } from '../types/offer';
 import { City } from '../types/city';
@@ -18,6 +18,7 @@ type StateType = {
   currentPoint?: Point;
   authorizationStatus: AuthStatus;
   user?: User;
+  randomCity: City;
 };
 
 const currentState: StateType = {
@@ -29,7 +30,8 @@ const currentState: StateType = {
   error: '',
   currentPoint: undefined,
   authorizationStatus: AuthStatus.Unknown,
-  user: undefined
+  user: undefined,
+  randomCity: CITIES_MOCK[5]
 };
 
 const reducer = createReducer(currentState, (builder) => {
@@ -63,6 +65,9 @@ const reducer = createReducer(currentState, (builder) => {
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;
+    })
+    .addCase(setRandomCity, (state, action) => {
+      state.randomCity = action.payload;
     });
 });
 

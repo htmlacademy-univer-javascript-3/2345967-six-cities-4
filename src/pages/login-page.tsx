@@ -1,10 +1,10 @@
 import { Link, Navigate } from 'react-router-dom';
 import { AppRoute, AuthStatus, LoadingStatus } from '../const';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { login } from '../store/api-actions';
 import { CITIES_MOCK } from '../mocks/cities';
-import { setCurrentCity } from '../store/action';
+import { setCurrentCity, setRandomCity } from '../store/action';
 
 function LoginPage(): JSX.Element {
   const authStatus = useAppSelector((state) => state.authorizationStatus);
@@ -15,13 +15,15 @@ function LoginPage(): JSX.Element {
   const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
   const loadingStatus = useAppSelector((state) => state.loadingStatus);
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const submitHandler = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(login({email, password}));
-  };
+  }, [dispatch, email, password]);
 
-  const randomCity = CITIES_MOCK[Math.floor(Math.random() * CITIES_MOCK.length)];
-  const onRandomCityClick = () => dispatch(setCurrentCity(randomCity));
+  useEffect(() => {
+    dispatch(setRandomCity(CITIES_MOCK[Math.floor(Math.random() * CITIES_MOCK.length)]));
+  }, [dispatch]);
+  const randomCity = useAppSelector((state) => state.randomCity);
 
   return authStatus !== AuthStatus.Auth ? (
     <div className="page page--gray page--login">
@@ -72,7 +74,7 @@ function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Main} onClick={onRandomCityClick}>
+              <Link className="locations__item-link" to={AppRoute.Main} onClick={() => dispatch(setCurrentCity(randomCity))}>
                 <span>{randomCity.name}</span>
               </Link>
             </div>
