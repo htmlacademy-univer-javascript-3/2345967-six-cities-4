@@ -16,3 +16,4 @@ export const setCurrentPoint = createAction<Point | undefined>('setSelectedPoint
 export const setAuthStatus = createAction<AuthStatus>('setAuthStatus');
 export const setUser = createAction<User | undefined>('setUser');
 export const addReview = createAction<Review>('addReview');
+export const setRandomCity = createAction<City>('setRandomCity');

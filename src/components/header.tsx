@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, AuthStatus } from '../const';
-import { useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { logout } from '../store/api-actions';
 
 function Header(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
   const auth = useAppSelector((state) => state.authorizationStatus === AuthStatus.Auth);
   const email = useAppSelector((state) => state.user?.email);
   const avatarUrl = useAppSelector((state) => state.user?.avatarUrl);
@@ -31,7 +36,7 @@ function Header(): JSX.Element {
               </li>}
               <li className="header__nav-item">
                 { auth ?
-                  <Link to={AppRoute.Login} className="header__nav-link">
+                  <Link to={AppRoute.Login} onClick={logoutHandler} className="header__nav-link">
                     <span className="header__signout">Sign out</span>
                   </Link>
                   :

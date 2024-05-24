@@ -4,10 +4,12 @@ import { LoadingStatus, SortOption } from '../const';
 import Map from '../components/map';
 import CitiesList from '../components/cities-list';
 import { CITIES_MOCK } from '../mocks/cities';
-import { useAppSelector } from '../store/hooks/index';
+import { useAppDispatch, useAppSelector } from '../store/hooks/index';
 import SortingOptions from '../components/sorting-options';
 import Spinner from '../components/spinner';
 import Header from '../components/header';
+import { loadOffer } from '../store/action';
+import { useEffect } from 'react';
 
 function getSortedOffers(offers: Offer[], sorting: SortOption): Offer[] {
   switch (sorting) {
@@ -23,6 +25,10 @@ function getSortedOffers(offers: Offer[], sorting: SortOption): Offer[] {
 }
 
 function MainPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(loadOffer(undefined));
+  });
   const offers: Offer[] = useAppSelector((state) => state.offersList);
   const currentCity = useAppSelector((state) => state.city);
   const loadingStatus = useAppSelector((state) => state.loadingStatus);
@@ -51,7 +57,8 @@ function MainPage(): JSX.Element {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map points={currentCityOffers.map((offer) => offer.location)} city={currentCity} selectedPoint={useAppSelector((state) => state.currentPoint)} />
+                <Map points={currentCityOffers.map((offer) => offer.location)} city={currentCity}/>
+                {/* selectedPoint={useAppSelector((state) => state.currentPoint)} /> */}
               </section>
             </div>
           </div>

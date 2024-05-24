@@ -3,17 +3,20 @@ import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
 import { setCurrentPoint } from '../../store/action';
 import { Dispatch } from '../../types/state';
+import { useAppSelector } from '../../store/hooks';
 
 type CardProps = {
   offer: Offer;
   dispatch: Dispatch;
 }
 function Card({ offer, dispatch }: CardProps): JSX.Element {
+  const blockedPoint = useAppSelector((state) => state.currentOffer?.location);
+
   return (
     <article
       className="cities__card place-card"
       onMouseEnter={() => dispatch(setCurrentPoint(offer.location))}
-      onMouseLeave={() => dispatch(setCurrentPoint(undefined))}
+      onMouseLeave={() => blockedPoint ? dispatch(setCurrentPoint(blockedPoint)) : dispatch(setCurrentPoint(undefined))}
     >
       <div className="cities__image-wrapper place-card__image-wrapper">
         {offer.isPremium &&

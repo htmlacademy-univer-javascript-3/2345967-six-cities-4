@@ -116,7 +116,7 @@ function OfferPage(): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <Map city={currentOffer.city} points={((currentOffer.nearby) ? currentOffer.nearby.slice(0, 3).map((offer) => offer.location) : []).concat(currentOffer.location)} selectedPoint={currentOffer.location} />
+            <Map city={currentOffer.city} points={((currentOffer.nearby) ? currentOffer.nearby.slice(0, 3).map((offer) => offer.location) : []).concat(currentOffer.location)} />
           </section>
         </section>
         <div className="container">

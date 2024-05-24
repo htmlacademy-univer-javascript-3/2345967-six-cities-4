@@ -5,14 +5,15 @@ import {City} from '../types/city';
 import {Point} from '../types/point';
 import 'leaflet/dist/leaflet.css';
 import { MapMarker } from '../const';
+import { useAppSelector } from '../store/hooks';
 
 type MapProps = {
   city: City;
   points: Point[];
-  selectedPoint?: Point;
 }
 
-function Map({city, points, selectedPoint}: MapProps): JSX.Element {
+function Map({city, points}: MapProps): JSX.Element {
+  const selectedPoint = useAppSelector((state) => state.currentPoint);
   const mapRef = React.useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
