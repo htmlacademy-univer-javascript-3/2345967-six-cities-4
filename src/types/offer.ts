@@ -1,5 +1,4 @@
-import { Review } from './rewiew';
-import { Image } from './image';
+import { Review } from './review';
 import { Point } from './point';
 import { City } from './city';
 import { User } from './user';
@@ -21,7 +20,7 @@ export type Offer = {
   bedrooms?: number;
   goods?: string[];
   host?: User;
-  images?: Image[];
+  images?: string[];
   maxAdults?: number;
 
   reviews?: Review[];

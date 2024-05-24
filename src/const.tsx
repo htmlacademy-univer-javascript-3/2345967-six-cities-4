@@ -2,7 +2,8 @@ export enum AppRoute {
   Main = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer'
+  Offer = '/offer',
+  NotFound = '/404'
 }
 
 export enum AuthStatus {
@@ -42,3 +43,6 @@ export enum LoadingStatus {
   Success,
   Error
 }
+
+export const REVIEW_MIN_LENGTH = 50;
+export const REVIEW_MAX_LENGTH = 300;
