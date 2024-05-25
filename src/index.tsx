@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import App from './app';
 import { store } from './store';
 import { Provider } from 'react-redux';
-import { fetchOffers } from './store/api-actions';
+import { checkAuth } from './store/api-actions';
 
-store.dispatch(fetchOffers());
+store.dispatch(checkAuth());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

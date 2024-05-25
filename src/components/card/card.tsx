@@ -1,22 +1,32 @@
 import { Offer } from '../../types/offer';
-import { AppRoute } from '../../const';
-import { Link } from 'react-router-dom';
+import { AppRoute, AuthStatus } from '../../const';
+import { Link, useNavigate } from 'react-router-dom';
 import { setCurrentPoint } from '../../store/action';
 import { Dispatch } from '../../types/state';
 import { useAppSelector } from '../../store/hooks';
+import { useCallback } from 'react';
+import { setFavorite } from '../../store/api-actions';
 
 type CardProps = {
   offer: Offer;
   dispatch: Dispatch;
 }
 function Card({ offer, dispatch }: CardProps): JSX.Element {
-  const blockedPoint = useAppSelector((state) => state.currentOffer?.location);
+  const fixedPoint = useAppSelector((state) => state.currentOffer?.location);
+  const auth = useAppSelector((state) => state.authorizationStatus === AuthStatus.Auth);
+  const navigate = useNavigate();
+  const favorteHandler = useCallback(() => {
+    if (!auth) {
+      return navigate(AppRoute.Login);
+    }
+    dispatch(setFavorite({id: offer.id, status: offer.isFavorite ? 0 : 1}));
+  }, [auth, dispatch, navigate, offer.id, offer.isFavorite]);
 
   return (
     <article
       className="cities__card place-card"
       onMouseEnter={() => dispatch(setCurrentPoint(offer.location))}
-      onMouseLeave={() => blockedPoint ? dispatch(setCurrentPoint(blockedPoint)) : dispatch(setCurrentPoint(undefined))}
+      onMouseLeave={() => fixedPoint ? dispatch(setCurrentPoint(fixedPoint)) : dispatch(setCurrentPoint(undefined))}
     >
       <div className="cities__image-wrapper place-card__image-wrapper">
         {offer.isPremium &&
@@ -34,6 +44,7 @@ function Card({ offer, dispatch }: CardProps): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
+            onClick={favorteHandler}
             className={`place-card__bookmark-button button ${offer.isFavorite ? 'place-card__bookmark-button--active' : ''}`}
             type="button"
           >

@@ -19,6 +19,11 @@ type UserLogin = {
   password: string;
 };
 
+type FavoriteData = {
+  id: string;
+  status: number;
+};
+
 export const fetchOffers = createAsyncThunk<Offer[], undefined, ThunkApiConfig>(
   'fetchOffers',
   async (_arg, {extra: api, dispatch}) => {
@@ -49,8 +54,9 @@ export const checkAuth = createAsyncThunk<void, undefined, ThunkApiConfig>(
   'user/checkAuth',
   async (_arg, {dispatch, extra: api}) => {
     try {
-      await api.get(ApiRoute.Login);
+      const {data: user} = await api.get<User>(ApiRoute.Login);
       dispatch(setAuthStatus(AuthStatus.Auth));
+      dispatch(setUser(user));
     } catch {
       dispatch(setAuthStatus(AuthStatus.NoAuth));
     }
@@ -80,6 +86,7 @@ export const logout = createAsyncThunk<void, undefined, ThunkApiConfig>(
     deleteToken();
     dispatch(setAuthStatus(AuthStatus.NoAuth));
     dispatch(setUser(undefined));
+    dispatch(fetchOffers());
   }
 );
 
@@ -97,6 +104,34 @@ export const postReview = createAsyncThunk<void, Review, ThunkApiConfig>(
       );
       dispatch(setLoadingStatus(LoadingStatus.Success));
       dispatch(addReview(review));
+    } catch (e) {
+      dispatch(setLoadingStatus(LoadingStatus.Error));
+    }
+  }
+);
+
+export const setFavorite = createAsyncThunk<void, FavoriteData, ThunkApiConfig>(
+  'setFavorite',
+  async (favoriteData, { dispatch, extra: api }) => {
+    dispatch(setLoadingStatus(LoadingStatus.Pending));
+    try {
+      await api.post<Offer>(`${ApiRoute.Favourites}/${favoriteData.id}/${favoriteData.status}`);
+      await dispatch(fetchOffers());
+      dispatch(setLoadingStatus(LoadingStatus.Success));
+    } catch (e) {
+      dispatch(setLoadingStatus(LoadingStatus.Error));
+    }
+  }
+);
+
+export const fetchFavorite = createAsyncThunk<void, undefined, ThunkApiConfig>(
+  'fetchFavorite',
+  async (_arg, { dispatch, extra: api }) => {
+    dispatch(setLoadingStatus(LoadingStatus.Pending));
+    try {
+      const { data: offers } = await api.get<Offer[]>(`${ApiRoute.Favourites}`);
+      dispatch(loadOffers(offers));
+      dispatch(setLoadingStatus(LoadingStatus.Success));
     } catch (e) {
       dispatch(setLoadingStatus(LoadingStatus.Error));
     }
